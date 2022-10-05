@@ -1,3 +1,4 @@
+using Domain.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructura.Services;
@@ -32,24 +33,33 @@ public class GroupSevices : IGroupServices
         }
 
     }
-    public async Task<Response<List<GEtGroupDto>>> GetGroups()
-    {
 
-        var groups = await (from gr in _context.Groups
-        join ch in _context.Challanges
-        on gr.ChallangeId equals ch.Id
-        orderby gr.CreatedAt descending
-        select new GEtGroupDto
+    public async Task<Response<List<GEtGroupDto>>> GetGroups()
         {
-            ChallangeId = ch.Id,
-            ChallangeName = ch.Title,
-            GroupNick = gr.GroupNick,
-            NeededMember = gr.NeededMember,
-            TeamSlogan = gr.TeamSlogan,
-            Id = gr.Id
-        }).ToListAsync();
-        return new Response<List<GEtGroupDto>>(groups);
-    }
+         var result = await 
+         (from gr in _context.Groups
+         select new GEtGroupDto()
+         {
+            Id = gr.Id,
+             GroupNick = gr.GroupNick,
+             NeededMember = gr.NeededMember,
+             TeamSlogan = gr.TeamSlogan,
+             Participants = (from p in _context.Participants
+             where p.Id == gr.Id 
+             select new GetParticipantDto()
+             {
+                 GroupId = p.GroupId,
+                 Id = p.Id,
+                 FullName = p.FullName,
+                 Email = p.Email,
+                 Phone = p.Phone,
+                 LocationId = p.LocationId
+             }
+             ).ToList(),
+         }
+         ).ToListAsync();
+return new Response<List<GEtGroupDto>>(result);
+        }
     public async Task<Response<AddGroupDto>> UpdateGroups(AddGroupDto group)
     {
         try
@@ -89,4 +99,5 @@ public class GroupSevices : IGroupServices
         }
 
     }
+
 }

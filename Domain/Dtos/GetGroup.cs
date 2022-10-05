@@ -9,4 +9,6 @@ public class GEtGroupDto
     public bool NeededMember { get; set; }
     public string? TeamSlogan { get; set; }
     public DateTime CreatedAt { get; set; }
+
+    public List<GetParticipantDto> Participants { get; set; }
 }

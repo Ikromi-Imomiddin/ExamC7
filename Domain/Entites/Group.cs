@@ -12,6 +12,7 @@ public class Group
     public string TeamSlogan { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public virtual List<Participant> Participants { get; set; }
+    
 
     public Group()
     {

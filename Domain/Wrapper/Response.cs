@@ -18,4 +18,8 @@ public class Response<T>
         StatusCode = 200;
         
     }
+
+    public Response(List<GEtGroupDto> item)
+    {
+    }
 }
