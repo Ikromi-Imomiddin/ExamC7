@@ -9,16 +9,49 @@ public class ParticipantServices : IParticipantService
     {
         _context = context;
     }
-    public async Task<Response<Participant>> AddParticipant(Participant Participant)
+    public async Task<Response<AddParticipantDto>> AddParticipant(AddParticipantDto model)
     {
-        await _context.Participants.AddAsync(Participant);
-        await _context.SaveChangesAsync();
-        return new Response<Participant>(Participant);
+        try
+        {
+            var Participant = new Participant()
+            {
+            Id = model.Id,
+            FullName = model.FullName,
+            Email = model.Email,
+            GroupId = model.GroupId,
+            LocationId = model.LocationId,
+            Phone = model.Phone
+
+            };
+            await _context.Participants.AddAsync(Participant);
+            await _context.SaveChangesAsync();
+            model.Id = Participant.Id;
+            return new Response<AddParticipantDto>(model);
+        }
+        catch (System.Exception ex)
+        {
+            return new Response<AddParticipantDto>(System.Net.HttpStatusCode.InternalServerError, ex.Message);
+        }
     }
-    public async Task<Response<List<Participant>>> GetParticipant()
+    public async Task<Response<List<GetParticipantDto>>> GetParticipant()
     {
-        var response = await _context.Participants.ToListAsync();
-        return new Response<List<Participant>>(response);
+       var participants = await (from pr in _context.Participants
+        join gr in _context.Groups
+        on pr.GroupId equals gr.Id
+        join lc in _context.Locations
+        on pr.LocationId equals lc.Id
+        orderby gr.CreatedAt descending
+        select new GetParticipantDto
+        {
+            Email = pr.Email,
+            FullName = pr.FullName,
+            Group = gr.GroupNick,
+            Location = lc.Title,
+            Phone = pr.Phone,
+            Id = pr.Id
+        }).ToListAsync();
+        
+        return new Response<List<GetParticipantDto>>(participants);
     }
     public async Task<Response<Participant>> UpdateParticipant(Participant Participant)
     {
@@ -40,25 +73,5 @@ public class ParticipantServices : IParticipantService
         _context.Participants.Remove(record);
         await _context.SaveChangesAsync();
         return new Response<string>("success");
-    }
-
-    public Task<Response<Location>> AddLocation(Location Location)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Response<List<Location>>> GetLocation()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Response<Location>> UpdateLocation(Location Location)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Response<string>> DaleteLocation(int id)
-    {
-        throw new NotImplementedException();
     }
 }

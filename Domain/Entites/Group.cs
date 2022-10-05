@@ -10,11 +10,11 @@ public class Group
     public bool NeededMember { get; set; }
     [MaxLength(300)]
     public string TeamSlogan { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
     public virtual List<Participant> Participants { get; set; }
 
     public Group()
     {
-     CreatedAt = DateTime.Now;   
+     CreatedAt = DateTimeOffset.UtcNow;   
     }
 }

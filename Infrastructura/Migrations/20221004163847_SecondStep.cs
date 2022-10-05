@@ -5,7 +5,7 @@
 namespace Infrastructura.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstStepp : Migration
+    public partial class SecondStep : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

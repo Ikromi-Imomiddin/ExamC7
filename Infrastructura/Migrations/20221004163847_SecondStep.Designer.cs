@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructura.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221004140213_FirstStepp")]
-    partial class FirstStepp
+    [Migration("20221004163847_SecondStep")]
+    partial class SecondStep
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,7 +56,7 @@ namespace Infrastructura.Migrations
                     b.Property<int>("ChallangeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("GroupNick")

@@ -13,14 +13,14 @@ public class ParticipantController
     }
 
     [HttpGet("getParticipant")]
-    public Task<Response<List<Participant>>> GetParticipant()
+    public Task<Response<List<GetParticipantDto>>> GetParticipant()
     {
         return _ParticipantService.GetParticipant();
     }
 
 
     [HttpPost("insertParticipant")]
-    public Task<Response<Participant>> AddParticipant(Participant Participant)
+    public Task<Response<AddParticipantDto>> AddParticipant(AddParticipantDto Participant)
     {
         return _ParticipantService.AddParticipant(Participant);
     }
