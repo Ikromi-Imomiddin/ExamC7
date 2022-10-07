@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructura.Services;
@@ -5,28 +6,20 @@ namespace Infrastructura.Services;
 public class ParticipantServices : IParticipantService
 {
     private readonly DataContext _context;
-    public ParticipantServices(DataContext context)
+    private readonly IMapper _mapper;
+    public ParticipantServices(DataContext context,IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
-    public async Task<Response<AddParticipantDto>> AddParticipant(AddParticipantDto model)
+    public async Task<Response<AddParticipantDto>> AddParticipant(AddParticipantDto participant)
     {
         try
         {
-            var Participant = new Participant()
-            {
-            Id = model.Id,
-            FullName = model.FullName,
-            Email = model.Email,
-            GroupId = model.GroupId,
-            LocationId = model.LocationId,
-            Phone = model.Phone
-
-            };
-            await _context.Participants.AddAsync(Participant);
+            Participant mapped = _mapper.Map<Participant>(participant);
+            await _context.Participants.AddAsync(mapped);
             await _context.SaveChangesAsync();
-            model.Id = Participant.Id;
-            return new Response<AddParticipantDto>(model);
+            return new Response<AddParticipantDto>(participant);
         }
         catch (System.Exception ex)
         {

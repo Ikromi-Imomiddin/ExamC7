@@ -23,19 +23,14 @@ public class ChallangeService : IChallangeServices
  
 
 
-    public async Task<Response<AddChallangeDto>> AddChallange(AddChallangeDto model)
+    public async Task<Response<AddChallangeDto>> AddChallange(AddChallangeDto challenge)
     {
         try
         {
-            var challange = new Challange()
-            {
-                Description = model.Description,
-                Title = model.Title
-            };
-            await _context.Challanges.AddAsync(challange);
+            Challange mapped = _mapper.Map<Challange>(challenge);
+            await _context.Challanges.AddAsync(mapped);
             await _context.SaveChangesAsync();
-            model.Id = challange.Id;
-            return new Response<AddChallangeDto>(model);
+            return new Response<AddChallangeDto>(challenge);
         }
         catch (System.Exception ex)
         {

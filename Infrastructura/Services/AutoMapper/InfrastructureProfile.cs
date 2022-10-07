@@ -8,5 +8,10 @@ public class InfrastructureProfile : Profile
         CreateMap<Challange, GEtChallangeDto>();
         CreateMap<Group, GEtGroupDto>();
         CreateMap<Location, AddLocationDto>();
+
+        CreateMap<AddChallangeDto, Challange>();
+        CreateMap<AddGroupDto, Group>();
+        CreateMap<AddLocationDto, Location>();
+        CreateMap<AddParticipantDto, Participant>();
     }
 }
