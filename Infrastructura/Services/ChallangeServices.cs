@@ -1,3 +1,4 @@
+using AutoMapper;
 using Domain.Dtos;
 using Infrastructura.Services;
 using Microsoft.EntityFrameworkCore;
@@ -5,11 +6,21 @@ using Microsoft.EntityFrameworkCore;
 public class ChallangeService : IChallangeServices
 {
     private readonly DataContext _context;
+    private readonly IMapper _mapper;
 
-    public ChallangeService(DataContext context)
+    public ChallangeService(DataContext context,IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
+
+
+    public async Task<Response<GEtChallangeDto>> GetChallangeByMapperById(int id)
+    {
+        var result = _mapper.Map<GEtChallangeDto>(await _context.Challanges.FindAsync(id));
+        return new Response<GEtChallangeDto>(result);
+    }
+ 
 
 
     public async Task<Response<AddChallangeDto>> AddChallange(AddChallangeDto model)

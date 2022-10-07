@@ -41,4 +41,11 @@ public class ChallangeController : ControllerBase
         return Challange;
     }
 
+        [HttpGet("GetChallangeByMapperById")]
+    public async Task<Response<GEtChallangeDto>> GetChallangeByMapperById(int id)
+    {
+        var Challanges = await _ChallangeService.GetChallangeByMapperById(id);
+        return Challanges;
+    }
+
 }

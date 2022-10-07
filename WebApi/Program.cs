@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(InfrastructureProfile));
 builder.Services.AddScoped<IGroupServices, GroupSevices>();
 builder.Services.AddScoped<IChallangeServices, ChallangeService>();
 builder.Services.AddScoped<IParticipantService, ParticipantServices>();

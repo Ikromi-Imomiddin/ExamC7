@@ -1,24 +1,33 @@
+using AutoMapper;
 using Domain.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 public class LocationService : ILocationService
 {
     private readonly DataContext _context;
+    private readonly IMapper _mapper;
 
-    public LocationService(DataContext context)
+    public LocationService(DataContext context,IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<Response<List<GEtLocationDto>>> GetLocations()
     {
-        var locations = await _context.Locations.Select(l=> new GEtLocationDto()
-        {
-            Description = l.Description,
-            Id = l.Id,
-            Title = l.Title
-        }).ToListAsync();
-        return new Response<List<GEtLocationDto>>(locations);
+        var location = await (from lo in _context.Locations
+                              select new GEtLocationDto()
+                              {
+                                  Description = lo.Description,
+                                  Id = lo.Id,
+                                  Title = lo.Title,
+                                  Challenges = (from ch in _context.Challanges
+                                               where ch.LocationId == lo.Id
+                                               select _mapper.Map<GEtChallangeDto>(ch)
+                                               ).ToList(),
+
+                              }).ToListAsync();
+        return new Response<List<GEtLocationDto>>(location);
     }
 
     //add location 

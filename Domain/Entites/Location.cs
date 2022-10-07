@@ -7,4 +7,5 @@ public class Location
     public string? Title { get; set; }
     public string? Description { get; set; }
     public virtual List<Participant>? Participants { get; set; }
+    public virtual List<Challange> Challanges { get; set; }
 }
